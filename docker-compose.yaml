@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  exchange-rate:
+    build:
+      context: ./exchange-rate
+    hostname: exchange-rate
+    ports:
+      - "8888:8888" 
+    environment:
+    - ProfilerAddr=0.0.0.0:6060
+    - HTTP_ADDR=0.0.0.0:8888
+    - BaseUrlCBR=http://www.cbr.ru
+    volumes:
+      - ./exchange-rate/:/app
+    restart: always
