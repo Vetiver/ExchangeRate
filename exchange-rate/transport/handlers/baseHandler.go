@@ -4,7 +4,6 @@ import (
 	"exchangeRate/config"
 	"exchangeRate/constants"
 	"exchangeRate/internal/domain"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -49,9 +48,12 @@ func (h *BaseHandler) ExchangeRate(c *gin.Context) {
 		date = time.Now().Format("02/01/2006")
 	}
 	val := c.Query("val")
+	if val == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": constants.WrongParamFormat})
+		return
+	}
 	record, err := h.exchangeRateService.ExchangeRate(date, val, h.config)
 	if err != nil {
-		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
